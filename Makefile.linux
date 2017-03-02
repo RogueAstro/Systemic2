@@ -14,7 +14,7 @@ INCLUDES = -I./deps/include      # -I/my/path
 LIBNAMES = -lm -lgsl -lgslcblas -lgomp -lc -lswift -lf2c -lgfortran
 
 
-OPTIMIZED_FLAGS = -g -fPIC -O3 $(INCLUDES) $(LIBS) -fopenmp -std=c99 
+OPTIMIZED_FLAGS = -g -fPIC -O3 $(INCLUDES) $(LIBS) -fopenmp -std=c99
 DEBUG_FLAGS =  $(INCLUDES) $(LIBS) -Wall -fopenmp -std=c99 -g3 -fPIC
 SYSFLAGS=$(OPTIMIZED_FLAGS)
 FFLAGS='-c -g -fPIC'
@@ -23,32 +23,32 @@ FFLAGS='-c -g -fPIC'
 #UPDATE = --update --java
 UPDATE =
 
-ALLOBJECTS = objects/swift.o objects/periodogram.o objects/extras.o objects/mercury.o objects/integration.o objects/mcmc.o objects/utils.o objects/simplex.o objects/kernel.o objects/bootstrap.o objects/kl.o objects/qsortimp.o objects/lm.o objects/lm.o objects/hermite.o objects/ode.o objects/odex.o objects/sa.o objects/de.o
+ALLOBJECTS = objects/swift.o objects/periodogram.o objects/extras.o objects/mercury.o objects/integration.o objects/mcmc.o objects/utils.o objects/simplex.o objects/kernel.o objects/bootstrap.o objects/kl.o objects/qsortimp.o objects/lm.o objects/lm.o objects/hermite.o objects/ode.o objects/odex.o objects/sa.o objects/de.o objects/gd.o
 
 linux: reqs src/*.c src/*.h  $(ALLOBJECTS)
-	gcc -shared -o libsystemic.so objects/*.o $(LIBS) $(LIBNAMES) 
+	gcc -shared -o libsystemic.so objects/*.o $(LIBS) $(LIBNAMES)
 	cp libsystemic.so R
 
 test: src/*.c src/*.h $(ALLOBJECTS)
 	$(CC)  -o test src/test.c objects/*.o $(CCFLAGS) $(SYSFLAGS) $(LIBNAMES)
 
 objects/kernel.o: src/kernel.c
-	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/kernel.o src/kernel.c 
+	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/kernel.o src/kernel.c
 
 objects/qsortimp.o: src/qsortimp.c
-	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/qsortimp.o src/qsortimp.c 
+	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/qsortimp.o src/qsortimp.c
 
 objects/extras.o: src/extras.c
-	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/extras.o src/extras.c 
+	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/extras.o src/extras.c
 
 objects/periodogram.o: src/periodogram.c
-	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/periodogram.o src/periodogram.c 
+	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/periodogram.o src/periodogram.c
 
 objects/simplex.o: src/simplex.c
-	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/simplex.o src/simplex.c 
+	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/simplex.o src/simplex.c
 
 objects/integration.o: src/integration.c
-	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/integration.o src/integration.c 
+	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/integration.o src/integration.c
 
 objects/mercury.o: src/mercury.c
 	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/mercury.o src/mercury.c
@@ -87,6 +87,9 @@ objects/sa.o: src/sa.c
 objects/de.o: src/de.c
 	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/de.o src/de.c
 
+objects/gd.o: src/gd.c
+	$(CC) $(CCFLAGS) $(SYSFLAGS) -c -o objects/gd.o src/gd.c
+
 .PHONY: clean cleanreqs
 
 clean:
@@ -104,7 +107,7 @@ R_packages_installed:
 	$(R) --vanilla --interactive --no-save < R/install.r
 	-touch R_packages_installed
 
-./deps/lib/libswift.a: 
+./deps/lib/libswift.a:
 	-echo "Making swift"
 	cd deps/swift; export FORTRAN=$(FORTRAN); export FFLAGS=$(FFLAGS); export SWIFT_DIR="`pwd`"; sh Makefile.sh; $(CC) -shared -o libswift.so objects/*.o; cp libswift.a ../lib
 
@@ -126,7 +129,7 @@ PACKAGE_DIR = ~/Downloads
 package: clean cleanreqs
 	- rm -Rf $(PACKAGE_DIR)/linux
 	- mkdir $(PACKAGE_DIR)/linux
-	- mkdir $(PACKAGE_DIR)/linux/Systemic	
+	- mkdir $(PACKAGE_DIR)/linux/Systemic
 	- mkdir $(PACKAGE_DIR)/linux/Systemic/objects
 	- rm prefs.txt
 
