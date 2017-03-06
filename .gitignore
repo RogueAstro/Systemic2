@@ -51,3 +51,8 @@ CVS
 doc/doc_todo.md
 tacc
 
+.idea/
+CMakeLists.txt
+cmake-build-debug/
+gui/
+utils/
