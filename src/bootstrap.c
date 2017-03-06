@@ -5,7 +5,6 @@
 #ifndef JAVASCRIPT
 #include "omp.h"
 #else
-#include "omp_shim.h"
 #endif
 
 ok_list* K_bootstrap(ok_kernel* k, int trials, int warmup, int malgo, int miter, double mparams[]) {
